@@ -122,14 +122,17 @@ These commands deploy service on the Kubernetes cluster in the default configura
 | `service.loadBalancerIP`               | loadBalancerIP if app service type is `LoadBalancer`                                                                                                      | `nil`                    |
 | `service.extraPorts`                   | Extra ports to expose in the service (normally used with the `sidecar` value)                                                                             | `nil`                    |
 | `ingress.enabled`                      | Enable ingress controller resource                                                                                                                        | `false`                  |
-| `ingress.certManager`                  | Add annotations for cert-manager                                                                                                                          | `false`                  |
-| `ingress.pathType`                     | Ingress Path type                                                                                                                                         | `ImplementationSpecific` |
-| `ingress.path`                         | The Path to app. You may need to set this to '/*' in order to use this with ALB ingress controllers.                                                      | `ImplementationSpecific` |
+| `ingress.hosts`                        | The list of hostnames to be covered with this ingress record.                                                                                             | `[]`                     |
+| `ingress.hosts.host`                   | The hostname record                                                                                                                                       | `''`                     |
+| `ingress.hosts.paths`                  | The list of pathes                                                                                                                                        | `[]`                     |
+| `ingress.hosts.paths.path`             | The path to app. In case of ALB you need set this to '/*', also if it contains string `internal` and with proper annotation it will redirected to 403     | `''`                     |
+| `ingress.hosts.paths.pathType`         | Ingress path type                                                                                                                                         | `''`                     |
 | `ingress.annotations`                  | Ingress annotations                                                                                                                                       | `{}`                     |
 | `ingress.tls.secretName`               | TLS secret                                                                                                                                                | `false`                  |
 | `ingress.tls.hosts`                    | TLS host                                                                                                                                                  | `false`                  |
 | `ingress.extraHosts`                   | The list of additional hostnames to be covered with this ingress record.                                                                                  | `[]`                     |
-| `ingress.extraPaths`                   | Additional arbitrary path/backend objects                                                                                                                 | `[]`                     |
+| `ingress.extraHosts.path`              | The path to extraHosts.                                                                                                                                   | `/`                      |
+| `ingress.extraHosts.pathType`          | Ingress path type of extraHosts.                                                                                                                          | `ImplementationSpecific` |
 | `ingress.extraTls`                     | The tls configuration for additional hostnames to be covered with this ingress record.                                                                    | `[]`                     |
 | `containerPort`                        | Port to expose at container level                                                                                                                         | `8080`                   |
 | `extraContainerPorts`                  | Extra Container Ports to expose at container level                                                                                                        | `nil`                    |
@@ -291,6 +294,26 @@ extraDeploy:
         ports:
         - protocol: TCP
           port: 5978
+```
+## Unautorized redirect on ingress ALB
+
+```yaml
+ingress:
+  enabled: true
+  annotations:
+    kubernetes.io/ingress.class: alb
+    # Additional annotations of ALB Ingress
+    # This is annotation that required
+    alb.ingress.kubernetes.io/actions.rule-403: >
+      {"type":"fixed-response","fixedResponseConfig":{"contentType":"text/plain","statusCode":"403","messageBody":"403 Forbidden"}}
+  hosts:
+    - host: api.example.com
+      paths:
+        - /api/v1/internal
+        - /api/v1/internal/*
+        - /*
+  pathType: ImplementationSpecific
+  ingressClassName: alb
 ```
 
 ## Authors
