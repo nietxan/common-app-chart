@@ -1,6 +1,5 @@
 {{- if .Values.jobs }}
 {{- range $job := .Values.jobs }}
----
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -50,5 +49,4 @@ spec:
       {{- end }}
       restartPolicy: {{ $job.restartPolicy }}
   backoffLimit: {{ $job.backoffLimit }}
-{{- end }}
 {{- end }}
