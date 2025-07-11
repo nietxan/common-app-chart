@@ -30,9 +30,9 @@ spec:
             pathType: {{ $.Values.ingress.pathType }}
             {{- end }}
             {{- if (and (contains "internal" .) (hasKey $.Values.ingress.annotations "alb.ingress.kubernetes.io/actions.rule-403" )) }}
-            backend: {{- include "ingress.backend" (dict "serviceName" "rule-403" "servicePort" "http" "context" $)  | nindent 14 }}
+            backend: {{- include "ingress.backend" (dict "serviceName" "rule-403" "servicePort" "use-annotation" "context" $)  | nindent 14 }}
             {{- else}}
-            backend: {{- include "ingress.backend" (dict "serviceName" (include "service.fullname" $) "servicePort" "use-annotation" "context" $)  | nindent 14 }}
+            backend: {{- include "ingress.backend" (dict "serviceName" (include "service.fullname" $) "servicePort" "http" "context" $)  | nindent 14 }}
             {{- end}}
         {{- end }}
     {{- end }}
@@ -45,9 +45,9 @@ spec:
             pathType: {{ default "ImplementationSpecific" .pathType }}
             {{- end }}
             {{- if (and (contains "internal" .) (hasKey $.Values.ingress.annotations "alb.ingress.kubernetes.io/actions.rule-403" )) }}
-            backend: {{- include "ingress.backend" (dict "serviceName" "rule-403" "servicePort" "http" "context" $)  | nindent 14 }}
+            backend: {{- include "ingress.backend" (dict "serviceName" "rule-403" "servicePort" "use-annotation" "context" $)  | nindent 14 }}
             {{- else}}
-            backend: {{- include "ingress.backend" (dict "serviceName" (include "service.fullname" $) "servicePort" "use-annotation" "context" $)  | nindent 14 }}
+            backend: {{- include "ingress.backend" (dict "serviceName" (include "service.fullname" $) "servicePort" "http" "context" $)  | nindent 14 }}
             {{- end}}
     {{- end }}
   {{- if or .Values.ingress.tls .Values.ingress.extraTls }}
