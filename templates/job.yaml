@@ -50,3 +50,4 @@ spec:
       restartPolicy: {{ $job.restartPolicy }}
   backoffLimit: {{ $job.backoffLimit }}
 {{- end }}
+{{- end }}
