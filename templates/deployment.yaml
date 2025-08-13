@@ -77,6 +77,12 @@ spec:
           - {{ . | quote }}
           {{- end }}
         {{- end }}
+        {{- if .Values.containerArgs }}
+        args:
+          {{- range .Values.containerArgs }}
+          - {{ . | quote }}
+          {{- end }}
+        {{- end }}
         ports:
         - name: http
           containerPort: {{ .Values.service.targetPort }}
