@@ -319,3 +319,13 @@ ingress:
 ## Authors
 
 Okassov Marat <marat@qcloudy.io>
+
+## For maintainers
+```shell
+# Make changes
+# Increment version
+helm package . --destination charts/
+cd charts/
+helm repo index .
+git push
+```
