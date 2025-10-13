@@ -31,6 +31,9 @@ spec:
         {{- if .Values.podAnnotations }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
+        {{- if .Values.consul.enabled }}
+        consul.hashicorp.com/connect-inject: "true"
+        {{- end }}
         {{- if .Values.secretsManager.bankVault.enabled }}
         {{- include "common.tplvalues.render" (dict "value" .Values.secretsManager.bankVault.annotations "context" $) | nindent 10 }}
         {{- end }}
