@@ -125,11 +125,11 @@ consul:
     ## @param consul.intentions.sources List of upstream sources and actions (allow/deny)
     ##
     sources:
-      - name: frontend
+      - name: "*"
         ## @param consul.intentions.sources[].action The action for traffic from the specified source
         ## Valid values: allow | deny
         ##
-        action: allow
+        action: deny
 
 ingress:
   enabled: false

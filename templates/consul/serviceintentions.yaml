@@ -1,4 +1,4 @@
-{{- if and .Values.consul.enabled .Values.consul.intentions.enabled }}
+{{- if and .Values.consul.enabled }}
 apiVersion: consul.hashicorp.com/v1alpha1
 kind: ServiceIntentions
 metadata:
@@ -36,7 +36,7 @@ spec:
           {{- end }}
         {{- end }}
       {{- end }}
-    {{- end}}
+    {{- end }}
     {{- if .Values.consul.ingressGateway.enabled }}
     - name: {{ .Values.consul.ingressGateway.name | default "ingress-gateway" | quote }}
       action: allow
