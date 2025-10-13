@@ -102,6 +102,10 @@ consul:
   ##
   enabled: true
 
+  ## @param consul.namespace Namespace where Consul server deployed
+  ##
+  namespace: consul
+
   ## @param consul.ingressGateway - Define the Consul ingress gateway for north-south traffic
   ## ref: https://developer.hashicorp.com/consul/docs/north-south/ingress-gateway/k8s
   ##
