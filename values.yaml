@@ -112,7 +112,7 @@ consul:
   ingressGateway:
     ## @param consul.ingressGateway.name The name of the Consul ingress gateway
     ##
-    name: "ingress-gateway"
+    name: "consul-ingress-gateway"
 
     ## @param consul.ingressGateway.enabled Enable the Consul ingress gateway resource
     ##
