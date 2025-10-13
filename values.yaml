@@ -94,6 +94,43 @@ service:
   ##
   extraPorts:
 
+## Consul Service configuration
+##
+consul:
+
+  ## @param consul.enabled Enable Consul service mesh integration for the application
+  ##
+  enabled: true
+
+  ## @param consul.ingressGateway - Define the Consul ingress gateway for north-south traffic
+  ## ref: https://developer.hashicorp.com/consul/docs/north-south/ingress-gateway/k8s
+  ##
+  ingressGateway:
+    ## @param consul.ingressGateway.name The name of the Consul ingress gateway
+    ##
+    name: "ingress-gateway"
+
+    ## @param consul.ingressGateway.enabled Enable the Consul ingress gateway resource
+    ##
+    enabled: true
+
+  ## @param consul.intentions - Define Consul intentions for service-to-service access control
+  ## ref: https://developer.hashicorp.com/consul/docs/connect/intentions
+  ##
+  intentions:
+    ## @param consul.intentions.enabled Enable Consul intentions for this service
+    ##
+    enabled: true
+
+    ## @param consul.intentions.sources List of upstream sources and actions (allow/deny)
+    ##
+    sources:
+      - name: frontend
+        ## @param consul.intentions.sources[].action The action for traffic from the specified source
+        ## Valid values: allow | deny
+        ##
+        action: allow
+
 ingress:
   enabled: false
   annotations: {}

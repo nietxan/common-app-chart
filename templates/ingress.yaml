@@ -3,7 +3,11 @@ apiVersion: {{ include "capabilities.ingress.apiVersion" . }}
 kind: Ingress
 metadata:
   name: {{ include "service.fullname" . }}
+  {{- if .Values.consul.enabled }}
+  namespace: {{ .Values.consul.namespace }}
+  {{- else }}
   namespace: {{ .Release.Namespace }}
+  {{- end }}
   labels: {{- include "service.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -31,7 +35,9 @@ spec:
             {{- end }}
             {{- if (and (contains "internal" .) (hasKey $.Values.ingress.annotations "alb.ingress.kubernetes.io/actions.rule-403" )) }}
             backend: {{- include "ingress.backend" (dict "serviceName" "rule-403" "servicePort" "use-annotation" "context" $)  | nindent 14 }}
-            {{- else}}
+            {{- else if $.Values.consul.ingressGateway.enabled }}
+            backend: {{- include "ingress.backend" (dict "serviceName" $.Values.consul.ingressGateway.name "servicePort" "http" "context" $)  | nindent 14 }}
+            {{- else }}
             backend: {{- include "ingress.backend" (dict "serviceName" (include "service.fullname" $) "servicePort" "http" "context" $)  | nindent 14 }}
             {{- end}}
         {{- end }}
@@ -46,9 +52,11 @@ spec:
             {{- end }}
             {{- if (and (contains "internal" .) (hasKey $.Values.ingress.annotations "alb.ingress.kubernetes.io/actions.rule-403" )) }}
             backend: {{- include "ingress.backend" (dict "serviceName" "rule-403" "servicePort" "use-annotation" "context" $)  | nindent 14 }}
-            {{- else}}
+            {{- else if $.Values.consul.ingressGateway.enabled }}
+            backend: {{- include "ingress.backend" (dict "serviceName" $.Values.consul.ingressGateway.name "servicePort" "http" "context" $)  | nindent 14 }}
+            {{- else }}
             backend: {{- include "ingress.backend" (dict "serviceName" (include "service.fullname" $) "servicePort" "http" "context" $)  | nindent 14 }}
-            {{- end}}
+            {{- end }}
     {{- end }}
   {{- if or .Values.ingress.tls .Values.ingress.extraTls }}
   tls:

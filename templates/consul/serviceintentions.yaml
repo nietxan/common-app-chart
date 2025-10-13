@@ -1,0 +1,45 @@
+{{- if and .Values.consul.enabled .Values.consul.intentions.enabled }}
+apiVersion: consul.hashicorp.com/v1alpha1
+kind: ServiceIntentions
+metadata:
+  name: {{ include "service.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+spec:
+  destination:
+    name: {{ include "service.fullname" . }}
+  sources:
+    {{- range .Values.consul.intentions.sources }}
+    - name: {{ .name | quote }}
+      action: {{ default "allow" .action }}
+      namespace: {{ default $.Release.Namespace .namespace }}
+      {{- if .permissions }}
+      permissions:
+        {{- range .permissions }}
+        - action: {{ .action }}
+          {{- with .http }}
+          http:
+            {{- with .http.pathExact }}
+            pathExact: {{ . | quote }}
+            {{- end }}
+            {{- with .http.pathPrefix }}
+            pathPrefix: {{ . | quote }}
+            {{- end }}
+            {{- with .http.pathRegex }}
+            pathRegex: {{ . | quote }}
+            {{- end }}
+            {{- with .http.methods }}
+            methods:
+              {{- range . }}
+              - {{ . | quote }}
+              {{- end}}
+            {{- end }}
+          {{- end }}
+        {{- end }}
+      {{- end }}
+    {{- end}}
+    {{- if .Values.consul.ingressGateway.enabled }}
+    - name: {{ .Values.consul.ingressGateway.name | default "ingress-gateway" | quote }}
+      action: allow
+      namespace: {{ $.Release.Namespace }}
+    {{- end }}
+{{- end}}
