@@ -3,6 +3,7 @@ apiVersion: consul.hashicorp.com/v1alpha1
 kind: ServiceIntentions
 metadata:
   name: {{ include "service.fullname" . }}
+  namespace: {{ default .Release.Namespace }}
 spec:
   destination:
     name: {{ include "service.fullname" . }}
@@ -10,7 +11,6 @@ spec:
     {{- range .Values.consul.intentions.sources }}
     - name: {{ .name | quote }}
       action: {{ default "allow" .action }}
-      namespace: {{ default $.Release.Namespace .namespace }}
       {{- if .permissions }}
       permissions:
         {{- range .permissions }}
