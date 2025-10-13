@@ -3,7 +3,6 @@ apiVersion: consul.hashicorp.com/v1alpha1
 kind: ServiceIntentions
 metadata:
   name: {{ include "service.fullname" . }}
-  namespace: {{ .Release.Namespace }}
 spec:
   destination:
     name: {{ include "service.fullname" . }}
