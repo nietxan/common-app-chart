@@ -36,7 +36,7 @@ spec:
             {{- if (and (contains "internal" .) (hasKey $.Values.ingress.annotations "alb.ingress.kubernetes.io/actions.rule-403" )) }}
             backend: {{- include "ingress.backend" (dict "serviceName" "rule-403" "servicePort" "use-annotation" "context" $)  | nindent 14 }}
             {{- else if $.Values.consul.ingressGateway.enabled }}
-            backend: {{- include "ingress.backend" (dict "serviceName" $.Values.consul.ingressGateway.name "servicePort" 8080 "context" $)  | nindent 14 }}
+            backend: {{- include "ingress.backend" (dict "serviceName" $.Values.consul.ingressGateway.serviceName "servicePort" 8080 "context" $)  | nindent 14 }}
             {{- else }}
             backend: {{- include "ingress.backend" (dict "serviceName" (include "service.fullname" $) "servicePort" "http" "context" $)  | nindent 14 }}
             {{- end}}
@@ -53,7 +53,7 @@ spec:
             {{- if (and (contains "internal" .) (hasKey $.Values.ingress.annotations "alb.ingress.kubernetes.io/actions.rule-403" )) }}
             backend: {{- include "ingress.backend" (dict "serviceName" "rule-403" "servicePort" "use-annotation" "context" $)  | nindent 14 }}
             {{- else if $.Values.consul.ingressGateway.enabled }}
-            backend: {{- include "ingress.backend" (dict "serviceName" $.Values.consul.ingressGateway.name "servicePort" 8080 "context" $)  | nindent 14 }}
+            backend: {{- include "ingress.backend" (dict "serviceName" $.Values.consul.ingressGateway.serviceName "servicePort" 8080 "context" $)  | nindent 14 }}
             {{- else }}
             backend: {{- include "ingress.backend" (dict "serviceName" (include "service.fullname" $) "servicePort" "http" "context" $)  | nindent 14 }}
             {{- end }}

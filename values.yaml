@@ -110,9 +110,13 @@ consul:
   ## ref: https://developer.hashicorp.com/consul/docs/north-south/ingress-gateway/k8s
   ##
   ingressGateway:
-    ## @param consul.ingressGateway.name The name of the Consul ingress gateway
+    ## @param consul.ingressGateway.serviceName The name of the Consul ingress gateway
     ##
-    name: "consul-ingress-gateway"
+    service: "ingress-gateway"
+
+    ## @param consul.ingressGateway.serviceName The name of the Consul ingress gateway service
+    ##
+    serviceName: "consul-ingress-gateway"
 
     ## @param consul.ingressGateway.enabled Enable the Consul ingress gateway resource
     ##

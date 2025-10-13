@@ -37,7 +37,7 @@ spec:
       {{- end }}
     {{- end }}
     {{- if .Values.consul.ingressGateway.enabled }}
-    - name: {{ .Values.consul.ingressGateway.name | default "consul-ingress-gateway" | quote }}
+    - name: {{ .Values.consul.ingressGateway.name | default "ingress-gateway" | quote }}
       action: allow
     {{- end }}
 {{- end }}
