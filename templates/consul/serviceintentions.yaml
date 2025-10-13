@@ -39,6 +39,5 @@ spec:
     {{- if .Values.consul.ingressGateway.enabled }}
     - name: {{ .Values.consul.ingressGateway.name | default "ingress-gateway" | quote }}
       action: allow
-      namespace: {{ $.Release.Namespace }}
     {{- end }}
 {{- end}}
