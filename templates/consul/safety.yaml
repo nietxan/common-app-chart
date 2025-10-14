@@ -1,5 +1,9 @@
-{{- if and .Values.consul.enabled (and (not .Values.serviceAccount.create) (ne (include "service.fullname" .) .Values.serviceAccount.name)) }}
-{{- fail (printf "Service and ServiceAccount names must match when Consul is enabled. Service=%s, serviceaccount=%s" (include "service.fullname" .) .Values.serviceAccount.name) }}
-{{- else if and .Values.consul.enabled (and (not .Values.serviceAccount.name) (not .Values.serviceAccount.create)) }}
-{{- fail (printf "ServiceAccount must be created when Consul is enabled") }}
+{{- if .Values.consul.enabled }}
+  {{- $svcName := include "service.fullname" . -}}
+  {{- $saName := .Values.serviceAccount.name -}}
+  {{- if and (not .Values.serviceAccount.create) (ne $saName "") (not (hasPrefix $saName $svcName)) }}
+    {{- fail (printf "Service and ServiceAccount names must match or prefix when Consul is enabled. Service=%s, serviceaccount=%s" $svcName $saName) }}
+  {{- else if and (not .Values.serviceAccount.create) (not $saName) }}
+    {{- fail "ServiceAccount must be created when Consul is enabled" }}
+  {{- end }}
 {{- end }}
