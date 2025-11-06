@@ -2,7 +2,7 @@
   {{- $svcName := include "service.fullname" . -}}
   {{- $saName := .Values.serviceAccount.name -}}
   {{- if and (not .Values.serviceAccount.create) (ne $saName "") (not (hasPrefix $saName $svcName)) }}
-    {{- fail (printf "Service and ServiceAccount names must match or prefix when Consul is enabled. Service=%s, serviceaccount=%s" $svcName $saName) }}
+    {{- fail (printf "Service and ServiceAccount names must match when Consul is enabled. Service=%s, serviceaccount=%s" $svcName $saName) }}
   {{- else if and (not .Values.serviceAccount.create) (not $saName) }}
     {{- fail "ServiceAccount must be created when Consul is enabled" }}
   {{- end }}
