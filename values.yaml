@@ -168,6 +168,27 @@ topologySpreadConstraints: {}
 ##
 env:
 
+## @param extraEnv - Array containing extra env vars that take over presence
+##
+## env:
+##   - name: LOG_LEVEL
+##     value: "info"
+##
+## extraEnv:
+##   - name: LOG_LEVEL
+##     value: "debug"
+## 
+## The final Kubernetes manifest will look like this
+## containers:
+## - name: common
+##   env:
+##   - name: LOG_LEVEL
+##     value: "info"
+##   - name: LOG_LEVEL
+##     value: "debug" # <--- Kubernetes uses this value
+##
+extraEnv:
+
 ## @param lifecycle - Add lifecycle values to the pod
 ##
 ## lifecycle:

@@ -61,7 +61,11 @@ spec:
         {{- end }}
         {{- if or .Values.env }}
         env:
+        {{- if .Values.env }}
         {{- include "common.tplvalues.render" (dict "value" .Values.env "context" $) | nindent 10 }}
+        {{- end }}
+        {{- if .Values.extraEnv }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.extraEnv "context" $) | nindent 10 }}
         {{- end }}
         {{- if or .Values.lifecycle }}
         lifecycle:
