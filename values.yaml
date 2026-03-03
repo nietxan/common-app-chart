@@ -168,26 +168,24 @@ topologySpreadConstraints: {}
 ##
 env:
 
-## @param extraEnv - Array containing extra env vars that take over presence
+## @param overwriteEnv - Array of env vars that override matching entries in `env`
 ##
 ## env:
 ##   - name: LOG_LEVEL
 ##     value: "info"
 ##
-## extraEnv:
+## overwriteEnv:
 ##   - name: LOG_LEVEL
 ##     value: "debug"
-## 
+##
 ## The final Kubernetes manifest will look like this
 ## containers:
 ## - name: common
 ##   env:
 ##   - name: LOG_LEVEL
-##     value: "info"
-##   - name: LOG_LEVEL
-##     value: "debug" # <--- Kubernetes uses this value
+##     value: "debug" # <--- overwriteEnv value replaces the env entry
 ##
-extraEnv:
+overwriteEnv:
 
 ## @param lifecycle - Add lifecycle values to the pod
 ##

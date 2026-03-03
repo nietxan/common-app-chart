@@ -59,13 +59,23 @@ spec:
         {{- if $.Values.resources }}
         resources: {{- include "common.tplvalues.render" (dict "value" .Values.resources "context" $) | nindent 10 }}
         {{- end }}
-        {{- if or .Values.env .Values.extraEnv }}
+        {{- if or .Values.env .Values.overwriteEnv }}
         env:
-          {{- if .Values.env }}
-          {{- include "common.tplvalues.render" (dict "value" .Values.env "context" $) | nindent 10 }}
+          {{- $overwriteEnvNames := list }}
+          {{- range .Values.overwriteEnv }}
+          {{- $overwriteEnvNames = append $overwriteEnvNames .name }}
           {{- end }}
-          {{- if .Values.extraEnv }}
-          {{- include "common.tplvalues.render" (dict "value" .Values.extraEnv "context" $) | nindent 10 }}
+          {{- if .Values.env }}
+          {{- $filteredEnv := list }}
+          {{- range .Values.env }}
+          {{- if not (has .name $overwriteEnvNames) }}
+          {{- $filteredEnv = append $filteredEnv . }}
+          {{- end }}
+          {{- end }}
+          {{- include "common.tplvalues.render" (dict "value" $filteredEnv "context" $) | nindent 10 }}
+          {{- end }}
+          {{- if .Values.overwriteEnv }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.overwriteEnv "context" $) | nindent 10 }}
           {{- end }}
         {{- end }}
         {{- if or .Values.lifecycle }}
