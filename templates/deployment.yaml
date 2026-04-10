@@ -17,7 +17,12 @@ spec:
   revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
   {{- end }}
   {{- if .Values.updateStrategy }}
-  strategy: {{- tpl (toYaml .Values.updateStrategy) $ | nindent 4 }}
+  strategy:
+    type: {{ .Values.updateStrategy.type | default "RollingUpdate" }}
+    {{- if and .Values.updateStrategy.rollingUpdate (ne (.Values.updateStrategy.type | default "RollingUpdate") "Recreate") }}
+    rollingUpdate:
+      {{- tpl (toYaml .Values.updateStrategy.rollingUpdate) $ | nindent 6 }}
+    {{- end }}
   {{- end }}
   selector:
     matchLabels: {{- include "service.labels.matchLabels" . | nindent 6 }}
