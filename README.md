@@ -295,7 +295,7 @@ extraDeploy:
         - protocol: TCP
           port: 5978
 ```
-## Unautorized redirect on ingress ALB
+### Unautorized redirect on ingress ALB
 
 ```yaml
 ingress:
