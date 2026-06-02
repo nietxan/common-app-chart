@@ -1,0 +1,70 @@
+{{- if .Values.cronjobs }}
+{{- range $cronjob := .Values.cronjobs }}
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ $cronjob.name }}
+  namespace: {{ $cronjob.namespace }}
+  {{- if $cronjob.annotations }}
+  annotations:
+    {{- toYaml $cronjob.annotations | nindent 4 }}
+  {{- end }}
+spec:
+  schedule: {{ $cronjob.schedule | quote }}
+  {{- if $cronjob.concurrencyPolicy }}
+  concurrencyPolicy: {{ $cronjob.concurrencyPolicy }}
+  {{- end }}
+  {{- if $cronjob.startingDeadlineSeconds }}
+  startingDeadlineSeconds: {{ $cronjob.startingDeadlineSeconds }}
+  {{- end }}
+  {{- if hasKey $cronjob "suspend" }}
+  suspend: {{ $cronjob.suspend }}
+  {{- end }}
+  successfulJobsHistoryLimit: {{ default 3 $cronjob.successfulJobsHistoryLimit }}
+  failedJobsHistoryLimit: {{ default 1 $cronjob.failedJobsHistoryLimit }}
+  jobTemplate:
+    spec:
+      {{- if $cronjob.backoffLimit }}
+      backoffLimit: {{ $cronjob.backoffLimit }}
+      {{- end }}
+      template:
+        spec:
+          {{- if $cronjob.imagePullSecrets }}
+          imagePullSecrets:
+          - name: {{ $cronjob.imagePullSecrets }}
+          {{- end }}
+          containers:
+          - image: "{{ $cronjob.image.url }}"
+            imagePullPolicy: {{ $cronjob.image.imagePullPolicy }}
+            name: {{ $cronjob.name }}
+            {{- if $cronjob.env }}
+            env:
+            {{- include "common.tplvalues.render" (dict "value" $cronjob.env "context" $) | nindent 12 }}
+            {{- end }}
+            {{- if $cronjob.envFrom }}
+            envFrom:
+            {{- include "common.tplvalues.render" (dict "value" $cronjob.envFrom "context" $) | nindent 12 }}
+            {{- end }}
+            {{- if $cronjob.command }}
+            command: {{ toYaml $cronjob.command | nindent 12 }}
+            {{- end }}
+            {{- if $cronjob.resources }}
+            resources:
+              {{ toYaml $cronjob.resources | nindent 14 }}
+            {{- end }}
+          {{- if $cronjob.nodeSelector }}
+          nodeSelector:
+            {{ toYaml $cronjob.nodeSelector | nindent 12 }}
+          {{- end }}
+          {{- if $cronjob.affinity }}
+          affinity:
+            {{ toYaml $cronjob.affinity | nindent 12 }}
+          {{- end }}
+          {{- if $cronjob.tolerations }}
+          tolerations:
+            {{ toYaml $cronjob.tolerations | nindent 12 }}
+          {{- end }}
+          restartPolicy: {{ $cronjob.restartPolicy }}
+---
+{{- end }}
+{{- end }}
