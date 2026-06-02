@@ -644,3 +644,25 @@ podDisruptionBudget:
 ##     backoffLimit: 4
 ##     restartPolicy: Never
 jobs:
+
+## @param cronjobs - Use to configure cronjobs
+## Example:
+## cronjobs:
+##   - name: cleanup-job
+##     namespace: default
+##     schedule: "0 2 * * *"
+##     concurrencyPolicy: Forbid
+##     successfulJobsHistoryLimit: 3
+##     failedJobsHistoryLimit: 1
+##     startingDeadlineSeconds: 60
+##     suspend: false
+##     image:
+##       url: https://hub.docker.com/_/nginx
+##       imagePullPolicy: IfNotPresent
+##     env:
+##       - name: DATABASE_URL
+##         value: "mysql://127.0.0.1:3306"
+##     command: ["/bin/sh","-c","echo hello"]
+##     backoffLimit: 2
+##     restartPolicy: OnFailure
+cronjobs:
