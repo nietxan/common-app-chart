@@ -45,11 +45,8 @@ spec:
     spec:
       {{- if .Values.serviceAccount.create }}
       serviceAccountName: {{ include "service.fullname" .}}
-      {{- end }}
-      {{- if not .Values.serviceAccount.create }}
-      {{- if .Values.serviceAccount.name }}
-      serviceAccountName: {{ .Values.serviceAccount.name }}
-      {{- end }}
+      {{- else }}
+      serviceAccountName: {{ .Values.serviceAccount.name | default "default" }}
       {{- end }}
       {{- if .Values.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
