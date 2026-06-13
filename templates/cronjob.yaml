@@ -20,8 +20,12 @@ spec:
   {{- if hasKey $cronjob "suspend" }}
   suspend: {{ $cronjob.suspend }}
   {{- end }}
-  successfulJobsHistoryLimit: {{ default 3 $cronjob.successfulJobsHistoryLimit }}
-  failedJobsHistoryLimit: {{ default 1 $cronjob.failedJobsHistoryLimit }}
+  {{- if hasKey $cronjob "successfulJobsHistoryLimit" }}
+  successfulJobsHistoryLimit: {{ $cronjob.successfulJobsHistoryLimit }}
+  {{- end }}
+  {{- if hasKey $cronjob "failedJobsHistoryLimit" }}
+  failedJobsHistoryLimit: {{ $cronjob.failedJobsHistoryLimit }}
+  {{- end }}
   jobTemplate:
     spec:
       {{- if $cronjob.backoffLimit }}
